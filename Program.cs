@@ -104,7 +104,7 @@ namespace SwiFGames
         public static void LoginMenu(BaseUsers baseUsers, Catalog catalog)
         {
             FormatTitles("Escolha uma das opções abaixo: \n1 - Fazer Login\n2 - Voltar ao Menu Principal");
-            int op = int.Parse(Console.ReadLine());
+            int op = int.Parse(Console.ReadLine()!);
 
             if (op == 1)
             {
@@ -128,6 +128,7 @@ namespace SwiFGames
                     {
                         if (user.Category == administrador)
                         {
+                            
                             Console.Clear();
                             MainTitle();
                             Console.WriteLine();
@@ -137,11 +138,12 @@ namespace SwiFGames
                         }
                         else if (user.Category == customer)
                         {
+                            Customer client = new Customer(user.UserId,user.Name,user.Email,user.Phone,user.Password,user.Category); 
                             Console.Clear();
                             MainTitle();
                             Console.WriteLine();
                             FormatTitles("CUSTOMER MENU");
-                            CustomerMenu(catalog);
+                            CustomerMenu(catalog, client);
                             //CHAMAR MENU CUSTOMER
                         }
                     }
@@ -228,10 +230,10 @@ namespace SwiFGames
             Console.WriteLine(text);
             Console.WriteLine(asterisco + "\n");
         }
-        public static void CustomerMenu(Catalog catalog)
+        public static void CustomerMenu(Catalog catalog, Customer client)
         {
             Console.WriteLine();
-            Console.WriteLine("1 - Ver Catalogo\n2 - Fazer um pedido\n3 - Histórico de Compras\n");
+            Console.WriteLine("1 - Ver Catalogo\n2 - Ver pedidos\n3 - Histórico de Compras\n");
             Console.WriteLine();
             Console.Write("Digite a opção desejada: ");
             int optionCustomerMenu = int.Parse(Console.ReadLine()!);
@@ -243,9 +245,27 @@ namespace SwiFGames
                     MainTitle();
                     FormatTitles("CATÁLOGO DA LOJA");
                     Console.WriteLine(catalog);
+
+                    Console.WriteLine();
+                    FormatTitles("Deseja fazer um pedido? (s/n)");
+                    Console.WriteLine();
+                    Console.Write("Digite a opção desejada: ");
+                    char op = char.Parse(Console.ReadLine()!);
+                    if (op == 's')
+                    {
+                        Console.Clear();
+                        MainTitle();
+                        RegisterOrder(catalog, client);
+                    }
+                    else if (op == 'n')
+                    {
+                        Console.Clear();
+                        MainTitle();
+                        CustomerMenu(catalog, client);
+                    }
                     break;
                 case 2:
-                    RegisterOrder(catalog);
+                                
                     break;
             }
         }
@@ -261,34 +281,9 @@ namespace SwiFGames
             catalog.AddToTheCatalog(p3);
             catalog.AddToTheCatalog(p4);
         }
-        public static void RegisterOrder(Catalog catalog)
+        public static void RegisterOrder(Catalog catalog, Customer client)
         {
-            Console.Clear();
-            MainTitle();
-            Console.WriteLine();
-            FormatTitles("Deseja ver o Catalogo? (s/n)");
-            char op = char.Parse(Console.ReadLine()!);
-            if (op == 's')
-            {
-                Console.Clear();
-                MainTitle();
-                FormatTitles("CATÁLOGO DA LOJA");
-                Console.WriteLine(catalog);
-            }
-            
-            Console.WriteLine();
-            FormatTitles("Deseja fazer um pedido?(s/n)");
-            op = char.Parse(Console.ReadLine()!);
-
-            if (op == 's')
-            {
-               //PENDENTE PARA PROXIMO ENCONTRO; 
-            }else
-            {
-                Console.Clear();
-                MainTitle();
-                CustomerMenu(catalog);
-            }
+            Console.WriteLine("REGISTRAR UMA ORDEM");
 
         }
 
