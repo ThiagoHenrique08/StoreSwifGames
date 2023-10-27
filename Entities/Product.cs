@@ -13,16 +13,19 @@ namespace SwiFGames.Entities
         public string? Description { get; set; }
         public double Price {  get; set; }
 
+        public int Quantity { get; set; }
+
         public Product()
         {
         }
 
-        public Product(int productId, string? name, string? description, double price)
+        public Product(int productId, string? name, string? description, double price, int quantity)
         {
             ProductId = productId;
             Name = name;
             Description = description;
             Price = price;
+            Quantity = quantity;
         }
     }
 }

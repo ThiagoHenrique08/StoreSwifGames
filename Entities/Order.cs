@@ -31,5 +31,8 @@ namespace SwiFGames.Entities
         {
             Products.Remove(product);
         }
+
+
+        // fazer o To string para imprimir o pedido e seus produtos
     }
 }

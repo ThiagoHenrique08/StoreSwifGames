@@ -1,4 +1,5 @@
 ﻿using SwiFGames.Entities;
+using System.Globalization;
 
 namespace SwiFGames
 {
@@ -128,7 +129,7 @@ namespace SwiFGames
                     {
                         if (user.Category == administrador)
                         {
-                            
+
                             Console.Clear();
                             MainTitle();
                             Console.WriteLine();
@@ -138,7 +139,7 @@ namespace SwiFGames
                         }
                         else if (user.Category == customer)
                         {
-                            Customer client = new Customer(user.UserId,user.Name,user.Email,user.Phone,user.Password,user.Category); 
+                            Customer client = new Customer(user.UserId, user.Name, user.Email, user.Phone, user.Password, user.Category);
                             Console.Clear();
                             MainTitle();
                             Console.WriteLine();
@@ -253,8 +254,8 @@ namespace SwiFGames
                     char op = char.Parse(Console.ReadLine()!);
                     if (op == 's')
                     {
-                        Console.Clear();
-                        MainTitle();
+                        //Console.Clear();
+                        //MainTitle();
                         RegisterOrder(catalog, client);
                     }
                     else if (op == 'n')
@@ -265,17 +266,17 @@ namespace SwiFGames
                     }
                     break;
                 case 2:
-                                
+
                     break;
             }
         }
         public static void AdministratorMenu() { }
         public static void RegisterProductsInCatalogManually(Catalog catalog)
         {
-            Product p1 = new Product(1, "God Of War 1", "God 4 Para todos os amantes de Jogos Nordicos", 550.00);
-            Product p2 = new Product(2, "Beatle Field", "Jogo de Guerra para afortunados e amantes de tiro", 600.00);
-            Product p3 = new Product(3, "Residen Evil Village", "Jogo que mexe com sua adrenalina e seus maiores medos", 700.00);
-            Product p4 = new Product(4, "FIFA 2023", "Para você que é amantes de Futebol FIFA veio trazer a melhor experiência", 800.00);
+            Product p1 = new Product(1, "God Of War 1", "God 4 Para todos os amantes de Jogos Nordicos", 550.00,1);
+            Product p2 = new Product(2, "Beatle Field", "Jogo de Guerra para afortunados e amantes de tiro", 600.00, 1);
+            Product p3 = new Product(3, "Residen Evil Village", "Jogo que mexe com sua adrenalina e seus maiores medos", 700.00, 1);
+            Product p4 = new Product(4, "FIFA 2023", "Para você que é amantes de Futebol FIFA veio trazer a melhor experiência", 800.00, 1);
             catalog.AddToTheCatalog(p1);
             catalog.AddToTheCatalog(p2);
             catalog.AddToTheCatalog(p3);
@@ -283,7 +284,47 @@ namespace SwiFGames
         }
         public static void RegisterOrder(Catalog catalog, Customer client)
         {
-            Console.WriteLine("REGISTRAR UMA ORDEM");
+            char controle;
+            Console.Write("Deseja selecionar um produto da lista? (s/n): ");
+            Console.WriteLine();
+            Console.Write("Selecione a opção desejada: ");
+            controle = char.Parse(Console.ReadLine()!);
+            Product f;
+            Order order = new Order();
+            while (controle == 's')
+            {
+              
+                Console.WriteLine();
+                Console.Write("Digite o ID do Produto escolhido: ");
+                int idproduct = int.Parse(Console.ReadLine()!);
+                
+                f = catalog.products.FirstOrDefault(x => x.ProductId == idproduct)!;
+                Console.WriteLine();
+                Console.Write("Digite a quantidade do produto: ");
+                int quantity = int.Parse(Console.ReadLine()!);
+                if (f != null)
+                {
+                    order.Products.Add(new Product(f.ProductId, f.Name, f.Description, f.Price * quantity, f.Quantity = quantity)); ;
+                }
+
+                Console.WriteLine();
+                Console.Write("Deseja selecionar outro produto da lista? (s/n): ");
+                controle = char.Parse(Console.ReadLine()!);
+
+            }
+            Console.WriteLine();
+            FormatTitles("Apresentado os produtos escolhidos");
+
+            foreach (Product product in order.Products)
+            {
+                
+                Console.WriteLine("Id: "+ product.ProductId);
+                Console.WriteLine("Nome: "+ product.Name);
+                Console.WriteLine("Descrição: "+ product.Description);
+                Console.WriteLine("Preço: R$"+ product.Price.ToString("F2", CultureInfo.InvariantCulture));
+                Console.WriteLine("Quantidade: "+ product.Quantity);
+                Console.WriteLine();
+            }
 
         }
 
