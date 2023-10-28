@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SwiFGames.Entities.Enums
 {
-    internal enum Status
+    internal enum StatusOrder
     {
-        Pending = 0,
-        Processing = 1,
-        Delivered = 2
+        Pending,
+        Processing,
+        Delivered
     }
 }

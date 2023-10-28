@@ -9,15 +9,17 @@ namespace SwiFGames.Entities
 {
     internal class Order
     {
+        public int OrderId { get; set; }
         public DateTime Moment { get; set; }
-        public Status Status { get; set; }
+        public StatusOrder Status { get; set; }
         public Customer? Customer { get; set; }
         public List<Product> Products { get; set; } = new List<Product>();
         public Order()
         {   
         }
-        public Order(DateTime moment, Status status, Customer? customer)
+        public Order(int orderId, DateTime moment, StatusOrder status, Customer? customer)
         {
+            OrderId = orderId;
             Moment = moment;
             Status = status;
             Customer = customer;
