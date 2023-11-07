@@ -36,7 +36,7 @@ namespace SwiFGames
         public static void MainMenu(BaseUsers baseUsers, Catalog catalog, OrderHistory orderHistory)
         {
             Console.WriteLine();
-            FormatTitles("MENU PRINCIPAL");
+            FormatTitles("***MENU PRINCIPAL***");
             Console.WriteLine("1 - Cadastre-se\n2 - Fazer Login\n");
             Console.WriteLine();
             Console.Write("Digite a opção desejada: ");
@@ -48,7 +48,7 @@ namespace SwiFGames
                     Console.Clear();
                     MainTitle();
                     UserRegistrationMenu(baseUsers);
-                    Console.WriteLine("Deseja voltar para o Menu Principal? s/n");
+                    Console.Write("Deseja voltar para o Menu Principal? s/n: ");
                     char op = char.Parse(Console.ReadLine()!);
                     if (op == 's')
                     {
@@ -73,7 +73,10 @@ namespace SwiFGames
         }
         public static void LoginMenu(BaseUsers baseUsers, Catalog catalog, OrderHistory orderHistory)
         {
-            FormatTitles("Escolha uma das opções abaixo: \n1 - Fazer Login\n2 - Voltar ao Menu Principal");
+            FormatTitles("***MENU PRINCIPAL***");
+            Console.WriteLine("1 - Fazer Login\n2 - Voltar ao Menu Principal");
+            Console.WriteLine();
+            Console.Write("Digite a opção desejada: ");
             int op = int.Parse(Console.ReadLine()!);
 
             if (op == 1)
@@ -102,7 +105,7 @@ namespace SwiFGames
                             Console.Clear();
                             MainTitle();
                             Console.WriteLine();
-                            FormatTitles("MENU ADMINISTRADOR");
+                            FormatTitles("***MENU ADMINISTRADOR***");
                             AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
 
                         }
@@ -143,7 +146,7 @@ namespace SwiFGames
         public static void UserRegistrationMenu(BaseUsers baseUsers)
         {
             Console.WriteLine();
-            FormatTitles("TELA DE CADASTRO DE USUÁRIOS");
+            FormatTitles("***TELA DE CADASTRO DE USUÁRIOS***");
             Console.WriteLine("1 - Cliente\n2 - Administrador\n3 - Imprimir Lista de Usuarios Cadastrados");
             Console.WriteLine();
             Console.Write("Selecione a opção desejada: ");
@@ -166,7 +169,7 @@ namespace SwiFGames
                 Console.Clear();
                 MainTitle();
                 Console.WriteLine();
-                FormatTitles("LISTA DE USUÁRIOS CADASTRADOS: ");
+                FormatTitles("***LISTA DE USUÁRIOS CADASTRADOS***");
                 Console.WriteLine(baseUsers);
             }
             else
@@ -182,7 +185,7 @@ namespace SwiFGames
         public static void UserRegistration(BaseUsers baseUsers, string category, int op)
         {
             Console.WriteLine();
-            FormatTitles("ENTRE COM OS DADOS DO USUÁRIO: ");
+            FormatTitles("***ENTRE COM OS DADOS DO USUÁRIO: ***");
             Console.Write("Id: ");
             int userId = int.Parse(Console.ReadLine()!);
             if (baseUsers.Users.Find(x => x.UserId == userId) != null)
@@ -213,7 +216,7 @@ namespace SwiFGames
             Console.Clear();
             MainTitle();
             Console.WriteLine();
-            FormatTitles("Usuário cadastrado com sucesso na base");
+            FormatTitles("***Usuário cadastrado com sucesso na base***");
             Console.WriteLine();
         }
         public static void RegisterUsersInTheBaseManually(BaseUsers baseUsers)
@@ -252,11 +255,11 @@ namespace SwiFGames
                 case 1:
                     Console.Clear();
                     MainTitle();
-                    FormatTitles("CATÁLOGO DA LOJA");
+                    FormatTitles("***CATÁLOGO DA LOJA***");
                     Console.WriteLine(catalog);
 
                     Console.WriteLine();
-                    FormatTitles("Deseja fazer um pedido? (s/n)");
+                    FormatTitles("***Deseja fazer um pedido? (s/n)***");
                     Console.WriteLine();
                     Console.Write("Digite a opção desejada: ");
                     char op = char.Parse(Console.ReadLine()!);
@@ -274,7 +277,7 @@ namespace SwiFGames
                 case 2:
                     Console.Clear();
                     MainTitle();
-                    FormatTitles("DADOS DO PEDIDO");
+                    FormatTitles("***DADOS DO PEDIDO***");
                     Console.WriteLine();
                     OrdersInProgress(baseUsers, catalog, customer, orderHistory);
                     FinalizePayment(baseUsers, catalog, customer, orderHistory);
@@ -364,7 +367,7 @@ namespace SwiFGames
 
 
 
-                        Console.WriteLine("aperte qualquer tecla para voltar");
+                        Console.WriteLine("Aperte qualquer tecla para voltar");
                         Console.ReadLine();
                         AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
 
@@ -435,7 +438,7 @@ namespace SwiFGames
                 controle = char.Parse(Console.ReadLine()!);
 
             }
-            FormatTitles("Aguarde um instante que estamos finalizando seu pedido");
+            FormatTitles("***Aguarde um instante que estamos finalizando seu pedido***");
 
             StatusOrder status = Enum.Parse<StatusOrder>("Processing");
             Random aleatorio = new Random();
@@ -456,7 +459,7 @@ namespace SwiFGames
             orderHistory.AddOrder(order);
             Console.WriteLine();
             Thread.Sleep(3000);
-            FormatTitles("Pedido realizado com sucesso!");
+            FormatTitles("***Pedido realizado com sucesso!***");
 
             Thread.Sleep(3000);
 
@@ -470,7 +473,7 @@ namespace SwiFGames
         public static void FinalizePayment(BaseUsers baseUsers, Catalog catalog, Customer customer, OrderHistory orderHistory)
         {
             Console.WriteLine();
-            FormatTitles("Deseja finalizar algum pedido? (s/n): ");
+            FormatTitles("***Deseja finalizar algum pedido? (s/n)***");
             Console.Write("Digite sua opção: ");
             char op = char.Parse(Console.ReadLine()!);
             Console.WriteLine();
@@ -482,7 +485,7 @@ namespace SwiFGames
                     int idPedido = int.Parse(Console.ReadLine()!);
 
                     Console.WriteLine();
-                    FormatTitles("Aguarde um instante, pagamento está sendo processado!");
+                    FormatTitles("***Aguarde um instante, pagamento está sendo processado!***");
 
                     StatusOrder status = new StatusOrder();
                     status = Enum.Parse<StatusOrder>("Delivered");
@@ -497,8 +500,8 @@ namespace SwiFGames
 
                     }
                     Thread.Sleep(3000);
-                    FormatTitles("Pagamento realizado com sucesso!");
-                    FormatTitles("Obrigado por comprar conosco!");
+                    FormatTitles("***Pagamento realizado com sucesso!***");
+                    FormatTitles("***Obrigado por comprar conosco!***");
                     Thread.Sleep(3000);
                     Console.Clear();
                     MainTitle();
@@ -535,7 +538,7 @@ namespace SwiFGames
                         Console.Write("Data do pedido: " + order.Moment + "\n");
                         Console.Write("Status: " + order.Status + "\n");
                         Console.Write("Cliente: " + order.Customer.Name + "\n");
-                        FormatTitles("Produtos Adquiridos neste pedido: ");
+                        FormatTitles("***Produtos Adquiridos neste pedido***");
                         foreach (Product product in order.Products)
                         {
                             Console.Write("Produto: " + product.Name + ", R$ " + product.Price.ToString("F2", CultureInfo.InvariantCulture) + "\n"); ;
@@ -553,7 +556,7 @@ namespace SwiFGames
             }
             else
             {
-                FormatTitles("USUÁRIO AINDA NÃO FINALIZOU UMA COMPRA!!! Para finalizar um pedido, favor entrar na opção Ver Pedido no Menu principal!");
+                FormatTitles("***USUÁRIO AINDA NÃO FINALIZOU UMA COMPRA!!! Para finalizar um pedido, favor entrar na opção Ver Pedido no Menu principal!***");
                 Thread.Sleep(3000);
                 Console.Clear();
                 MainTitle();
@@ -593,25 +596,13 @@ namespace SwiFGames
             }
             else
             {
-                FormatTitles("USUÁRIO AINDA NÃO POSSUI PEDIDO!!! Para realizar um pedido, favor entrar no catalogo e selecionar um produto!");
+                FormatTitles("***USUÁRIO AINDA NÃO POSSUI PEDIDO!!! Para realizar um pedido, favor entrar no catalogo e selecionar um produto!***");
                 Thread.Sleep(3000);
                 Console.Clear();
                 MainTitle();
                 CustomerMenu(baseUsers, catalog, customer, orderHistory);
             }
         }
-
-        public static void ChangeProduct(BaseUsers baseUsers, Catalog catalog, Customer customer, OrderHistory orderHistory)
-        {
-
-            int id = 1;
-            string name = "Teste";
-            string descricao = "teste do bagulho";
-            double price = 50.00;
-
-
-        }
-
     }
 }
 
