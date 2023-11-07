@@ -3,6 +3,8 @@ using System.Globalization;
 using SwiFGames.Entities.Enums;
 using System.Security.Cryptography;
 using System.Net.NetworkInformation;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace SwiFGames
 {
@@ -96,13 +98,13 @@ namespace SwiFGames
                     {
                         if (user.Category == administrador)
                         {
-
+                            Administrator administrator = new Administrator(user.UserId, user.Name, user.Email, user.Phone, user.Password, user.Category);
                             Console.Clear();
                             MainTitle();
                             Console.WriteLine();
-                            FormatTitles("ADMINISTRATOR MENU");
-                            AdministratorMenu();
-                            //CHAMAR MENU ADMIISTRADOR
+                            FormatTitles("MENU ADMINISTRADOR");
+                            AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
+
                         }
                         else if (user.Category == customer)
                         {
@@ -110,9 +112,9 @@ namespace SwiFGames
                             Console.Clear();
                             MainTitle();
                             Console.WriteLine();
-                            FormatTitles("CUSTOMER MENU");
+                            FormatTitles("MENU CLIENTE");
                             CustomerMenu(baseUsers, catalog, client, orderHistory);
-                            //CHAMAR MENU CUSTOMER
+
                         }
                     }
                     else
@@ -290,17 +292,118 @@ namespace SwiFGames
                     break;
             }
         }
-        public static void AdministratorMenu() { }
+        public static void AdministratorMenu(BaseUsers baseUsers, Catalog catalog, Administrator administrator, OrderHistory orderHistory)
+        {
+            Console.WriteLine("1 - Produtos\n2 - Relatórios\n3 - Logout");
+            Console.WriteLine();
+            Console.Write("Digite a opção desejada: ");
+            int optionCustomerMenu = int.Parse(Console.ReadLine()!);
+
+            switch (optionCustomerMenu)
+            {
+                case 1:
+                    Console.Clear();
+                    MainTitle();
+                    Console.WriteLine();
+                    Console.WriteLine("1 - Cadastrar um novo produto\n2 - Remover um produto\n3 - Alterar dados de um produto");
+                    Console.Write("Digite a opção desejada: ");
+                    int op = int.Parse(Console.ReadLine()!);
+                    if (op == 1)
+                    {
+                        Random aleatorio = new Random();
+                        int auxId = aleatorio.Next(100);
+
+                        while (catalog.products.FirstOrDefault(x => x.ProductId == auxId) != null)
+                        {
+                            auxId = aleatorio.Next(100);
+                        }
+                        Console.Write("Digite o nome do produto: ");
+                        string name = Console.ReadLine()!;
+                        Console.Write("Digite uma descrição do produto: ");
+                        string description = Console.ReadLine()!;
+                        Console.Write("Digite o preço do produto: ");
+                        double price = double.Parse(Console.ReadLine(),CultureInfo.InvariantCulture);
+                        catalog.AddToProductToCatalog(new Product (auxId, name, description, price));
+                        Console.WriteLine();
+                        Console.WriteLine("Aperte qualquer tecla para voltar");
+                        Console.Clear();
+                        MainTitle();
+                        AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
+
+                    }
+                    else if (op == 2)
+                    {
+
+                        Console.Clear();
+                        MainTitle();
+                        Console.WriteLine(catalog);
+
+                    }
+                    else if (op == 3)
+                    {
+                        Console.Clear();
+                        MainTitle();
+                        Console.WriteLine(catalog);
+                        Console.WriteLine();
+                        FormatTitles("***ALTERANDO OS DADOS DO PRODUTO***:");
+
+                        Console.WriteLine("Digite o ID do produto a ser alterado");
+                        int id = int.Parse(Console.ReadLine()!);
+
+                        Console.Write("Digite o nome do produto: ");
+                        string name = Console.ReadLine()!;
+                        Console.Write("Digite uma descrição do produto: ");
+                        string description = Console.ReadLine()!;
+                        Console.Write("Digite o preço do produto: ");
+                        double price = double.Parse(Console.ReadLine(),CultureInfo.InvariantCulture);
+
+                        if (catalog.products.FirstOrDefault(x => x.ProductId == id) != null)
+                        {
+                            catalog.ChangeCatalogProduct(id, name, description, price);
+                        }
+
+
+
+                        Console.WriteLine("aperte qualquer tecla para voltar");
+                        Console.ReadLine();
+                        AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
+
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        MainTitle();
+                        AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
+                    }
+
+                    break;
+                case 2:
+                    Console.Clear();
+                    MainTitle();
+
+                    break;
+
+                case 3:
+                    Console.Clear();
+                    MainTitle();
+
+                    break;
+            }
+
+
+
+
+        }
         public static void RegisterProductsInCatalogManually(Catalog catalog)
         {
             Product p1 = new Product(1, "God Of War 1", "God 4 Para todos os amantes de Jogos Nordicos", 550.00, 1);
             Product p2 = new Product(2, "Beatle Field", "Jogo de Guerra para afortunados e amantes de tiro", 600.00, 1);
             Product p3 = new Product(3, "Residen Evil Village", "Jogo que mexe com sua adrenalina e seus maiores medos", 700.00, 1);
             Product p4 = new Product(4, "FIFA 2023", "Para você que é amantes de Futebol FIFA veio trazer a melhor experiência", 800.00, 1);
-            catalog.AddToTheCatalog(p1);
-            catalog.AddToTheCatalog(p2);
-            catalog.AddToTheCatalog(p3);
-            catalog.AddToTheCatalog(p4);
+            catalog.AddToProductToCatalog(p1);
+            catalog.AddToProductToCatalog(p2);
+            catalog.AddToProductToCatalog(p3);
+            catalog.AddToProductToCatalog(p4);
         }
         public static void RegisterOrder(BaseUsers baseUsers, Catalog catalog, Customer customer, OrderHistory orderHistory)
         {
@@ -439,7 +542,7 @@ namespace SwiFGames
                         }
                         Console.WriteLine("=====================================================");
                     }
-                    
+
                 }
                 Console.WriteLine();
                 Console.Write("Digite qualquer tecla para voltar ao menu principal: ");
@@ -471,7 +574,7 @@ namespace SwiFGames
                 {
 
 
-                    if ((order.Status == status && order.Customer.UserId == customer.UserId)) 
+                    if ((order.Status == status && order.Customer.UserId == customer.UserId))
                     {
                         Console.Write("Id Pedido: " + order.OrderId + "\n");
                         Console.Write("Data do pedido: " + order.Moment + "\n");
@@ -485,9 +588,10 @@ namespace SwiFGames
                         Console.WriteLine("=====================================================");
 
                     }
-                    
+
                 }
-            }else
+            }
+            else
             {
                 FormatTitles("USUÁRIO AINDA NÃO POSSUI PEDIDO!!! Para realizar um pedido, favor entrar no catalogo e selecionar um produto!");
                 Thread.Sleep(3000);
@@ -497,6 +601,16 @@ namespace SwiFGames
             }
         }
 
+        public static void ChangeProduct(BaseUsers baseUsers, Catalog catalog, Customer customer, OrderHistory orderHistory)
+        {
+
+            int id = 1;
+            string name = "Teste";
+            string descricao = "teste do bagulho";
+            double price = 50.00;
+
+
+        }
 
     }
 }

@@ -27,5 +27,16 @@ namespace SwiFGames.Entities
             Price = price;
             Quantity = quantity;
         }
+        public Product(int productId, string? name, string? description, double price)
+        {
+            ProductId = productId;
+            Name = name;
+            Description = description;
+            Price = price;
+  
+        }
+
+
+
     }
 }
