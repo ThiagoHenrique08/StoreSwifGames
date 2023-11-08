@@ -1,10 +1,6 @@
 ﻿using SwiFGames.Entities;
 using System.Globalization;
 using SwiFGames.Entities.Enums;
-using System.Security.Cryptography;
-using System.Net.NetworkInformation;
-using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace SwiFGames
 {
@@ -258,11 +254,11 @@ namespace SwiFGames
                     FormatTitles("***CATÁLOGO DA LOJA***");
                     Console.WriteLine(catalog);
 
-                    Console.WriteLine();
                     FormatTitles("***Deseja fazer um pedido? (s/n)***");
                     Console.WriteLine();
                     Console.Write("Digite a opção desejada: ");
                     char op = char.Parse(Console.ReadLine()!);
+                    Console.WriteLine();
                     if (op == 's')
                     {
                         RegisterOrder(baseUsers, catalog, customer, orderHistory);
@@ -411,9 +407,9 @@ namespace SwiFGames
         public static void RegisterOrder(BaseUsers baseUsers, Catalog catalog, Customer customer, OrderHistory orderHistory)
         {
             char controle;
-            Console.Write("Deseja selecionar um produto da lista? (s/n): ");
+            FormatTitles("***Deseja selecionar um produto da lista? (s/n)***");
             Console.WriteLine();
-            Console.Write("Selecione a opção desejada: ");
+            Console.Write("Digite a opção desejada: ");
             controle = char.Parse(Console.ReadLine()!);
             Product f;
             Order order = new Order();
@@ -434,10 +430,13 @@ namespace SwiFGames
                 }
 
                 Console.WriteLine();
-                Console.Write("Deseja selecionar outro produto da lista? (s/n): ");
+                FormatTitles("***Deseja selecionar outro produto da lista? (s/n)***");
+                Console.WriteLine();
+                Console.Write("Digite a opção desejada: ");
                 controle = char.Parse(Console.ReadLine()!);
 
             }
+            Console.WriteLine();
             FormatTitles("***Aguarde um instante que estamos finalizando seu pedido***");
 
             StatusOrder status = Enum.Parse<StatusOrder>("Processing");
@@ -481,7 +480,7 @@ namespace SwiFGames
             switch (op)
             {
                 case 's':
-                    Console.WriteLine("Informe o ID do pedido: ");
+                    Console.Write("Informe o ID do pedido: ");
                     int idPedido = int.Parse(Console.ReadLine()!);
 
                     Console.WriteLine();
@@ -501,6 +500,7 @@ namespace SwiFGames
                     }
                     Thread.Sleep(3000);
                     FormatTitles("***Pagamento realizado com sucesso!***");
+                    Console.WriteLine();
                     FormatTitles("***Obrigado por comprar conosco!***");
                     Thread.Sleep(3000);
                     Console.Clear();
