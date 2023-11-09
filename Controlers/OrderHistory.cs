@@ -4,18 +4,19 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SwiFGames.Entities;
 
-namespace SwiFGames.Entities
+namespace SwiFGames.Controlers
 {
     internal class OrderHistory
     {
-      public  List<Order> orders { get; set; } = new List<Order>();
+        public List<Order> orders { get; set; } = new List<Order>();
 
-        
+
 
         public void AddOrder(Order order)
         {
-            orders.Add(order); 
+            orders.Add(order);
         }
 
         public void RemoveOrder(Order order)
@@ -28,7 +29,7 @@ namespace SwiFGames.Entities
             StringBuilder sb = new StringBuilder();
             foreach (Order order in orders)
             {
-             
+
                 sb.Append("Id: ");
                 sb.Append(order.OrderId);
                 sb.AppendLine();
@@ -61,7 +62,7 @@ namespace SwiFGames.Entities
                 sb.Append("===========================================================================");
                 sb.AppendLine();
             }
-     
+
 
             return sb.ToString();
         }
