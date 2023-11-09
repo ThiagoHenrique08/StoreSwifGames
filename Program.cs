@@ -151,7 +151,7 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
         {
             Console.WriteLine();
             FormatTitles("***TELA DE CADASTRO DE USUÁRIOS***");
-            Console.WriteLine("1 - Cliente\n2 - Administrador\n3 - Imprimir Lista de Usuários Cadastrados");
+            Console.WriteLine("1 - Cliente\n2 - Administrador\n");
             Console.WriteLine();
             Console.Write("Selecione a opção desejada: ");
             int op = int.Parse(Console.ReadLine()!);
