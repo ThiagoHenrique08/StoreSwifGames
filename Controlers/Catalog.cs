@@ -35,6 +35,7 @@ namespace SwiFGames.Controlers
 
         public override string ToString()
         {
+
             StringBuilder sb = new StringBuilder();
             sb.Append("*************************************************************************************");
             foreach (Product product in products)

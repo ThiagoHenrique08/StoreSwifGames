@@ -23,19 +23,17 @@ namespace SwiFGames
         public static void MainTitle()
         {
             Console.Clear();
-            /*Console.WriteLine(@"
-░██████╗░██╗░░░░░░░██╗██╗███████╗  ░██████╗░░█████╗░███╗░░░███╗███████╗░██████╗
-██╔════╝░██║░░██╗░░██║██║██╔════╝  ██╔════╝░██╔══██╗████╗░████║██╔════╝██╔════╝
-╚█████╗░░╚██╗████╗██╔╝██║█████╗░░  ██║░░██╗░███████║██╔████╔██║█████╗░░╚█████╗░
-░╚═══██╗░░████╔═████║░██║██╔══╝░░  ██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░░╚═══██╗
-██████╔╝░░╚██╔╝░╚██╔╝░██║██║░░░░░  ╚██████╔╝██║░░██║██║░╚═╝░██║███████╗██████╔╝
-╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░░░░  ░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝╚═════╝░");*/
+
+
             Console.WriteLine(@"
 █████████████████████████████████▀███████████████████████████
 █─▄▄▄▄█▄─█▀▀▀█─▄█▄─▄█▄─▄▄─███─▄▄▄▄██▀▄─██▄─▀█▀─▄█▄─▄▄─█─▄▄▄▄█
 █▄▄▄▄─██─█─█─█─███─███─▄█████─██▄─██─▀─███─█▄█─███─▄█▀█▄▄▄▄─█
 ▀▄▄▄▄▄▀▀▄▄▄▀▄▄▄▀▀▄▄▄▀▄▄▄▀▀▀▀▀▄▄▄▄▄▀▄▄▀▄▄▀▄▄▄▀▄▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀");
-FormatTitles("=======================Seja Bem-Vindo!=======================");
+
+
+
+            FormatTitles("========================Seja Bem-Vindo!=======================");
         }
         public static void MainMenu(BaseUsers baseUsers, Catalog catalog, OrderHistory orderHistory)
         {
@@ -105,7 +103,7 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                     {
                         if (user.Category == administrador)
                         {
-                            Administrator administrator = new Administrator(user.UserId, user.Name, user.Email, user.Phone, user.Password, user.Category);
+                            Administrator administrator = new Administrator(user.UserId, user.Name!, user.Email, user.Phone!, user.Password, user.Category);
 
                             MainTitle();
                             Console.WriteLine();
@@ -115,11 +113,11 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                         }
                         else if (user.Category == customer)
                         {
-                            Customer client = new Customer(user.UserId, user.Name, user.Email, user.Phone, user.Password, user.Category);
+                            Customer client = new Customer(user.UserId, user.Name!, user.Email, user.Phone!, user.Password, user.Category);
 
                             MainTitle();
                             Console.WriteLine();
-                            FormatTitles("MENU CLIENTE");
+
                             CustomerMenu(baseUsers, catalog, client, orderHistory);
 
                         }
@@ -242,8 +240,9 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
         }
         public static void CustomerMenu(BaseUsers baseUsers, Catalog catalog, Customer customer, OrderHistory orderHistory)
         {
+            FormatTitles("MENU CLIENTE");
             Console.WriteLine();
-            Console.WriteLine("1 - Ver Catalogo\n2 - Ver pedidos\n3 - Histórico de Compras\n4 - Logout");
+            Console.WriteLine("1 - Fazer um pedido\n2 - Ver pedidos\n3 - Histórico de Compras\n4 - Logout");
             Console.WriteLine();
             Console.Write("Digite a opção desejada: ");
             int optionCustomerMenu = int.Parse(Console.ReadLine()!);
@@ -253,24 +252,8 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                 case 1:
 
                     MainTitle();
-                    FormatTitles("***CATÁLOGO DA LOJA***");
-                    Console.WriteLine(catalog);
+                    RegisterOrder(baseUsers, catalog, customer, orderHistory);
 
-                    FormatTitles("***Deseja fazer um pedido? (s/n)***");
-                    Console.WriteLine();
-                    Console.Write("Digite a opção desejada: ");
-                    char op = char.Parse(Console.ReadLine()!);
-                    Console.WriteLine();
-                    if (op == 's')
-                    {
-                        RegisterOrder(baseUsers, catalog, customer, orderHistory);
-                    }
-                    else if (op == 'n')
-                    {
-                        Console.Clear();
-                        //MainTitle();
-                        CustomerMenu(baseUsers, catalog, customer, orderHistory);
-                    }
                     break;
                 case 2:
 
@@ -325,7 +308,7 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                         Console.Write("Digite uma descrição do produto: ");
                         string description = Console.ReadLine()!;
                         Console.Write("Digite o preço do produto: ");
-                        double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                        double price = double.Parse(Console.ReadLine()!, CultureInfo.InvariantCulture);
                         catalog.AddToProductToCatalog(new Product(auxId, name, description, price));
                         Console.WriteLine();
                         FormatTitles("Produto Adicionado com sucesso!");
@@ -382,7 +365,7 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                         if (product != null)
                         {
                             Console.WriteLine("Deseja alterar qual dado? \n1 - Nome\n2 - Descrição\n3 - Preço");
-                            
+
                             int option = int.Parse(Console.ReadLine()!);
 
                             if (option == 1)
@@ -398,7 +381,7 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                             else if (option == 3)
                             {
                                 Console.Write("Preço: ");
-                                product.Price = double.Parse(Console.ReadLine()!,CultureInfo.InvariantCulture);
+                                product.Price = double.Parse(Console.ReadLine()!, CultureInfo.InvariantCulture);
                             }
 
                             Console.WriteLine("IMPRIMINDO DADOS ALTERADOS");
@@ -449,7 +432,7 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                 case 2:
 
                     MainTitle();
-
+                    Reports(baseUsers, catalog, administrator, orderHistory);
                     break;
 
                 case 3:
@@ -492,11 +475,21 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
         }
         public static void RegisterOrder(BaseUsers baseUsers, Catalog catalog, Customer customer, OrderHistory orderHistory)
         {
+            Console.WriteLine();
+            FormatTitles("***CATÁLOGO DA LOJA***");
+            Console.WriteLine(catalog);
+
             char controle;
+            Console.WriteLine();
             FormatTitles("***Deseja selecionar um produto da lista? (s/n)***");
             Console.WriteLine();
             Console.Write("Digite a opção desejada: ");
             controle = char.Parse(Console.ReadLine()!);
+            if (controle == 'n')
+            {
+                MainTitle();
+                CustomerMenu(baseUsers, catalog, customer, orderHistory);
+            }
             Product f;
             Order order = new Order();
             while (controle == 's')
@@ -521,7 +514,9 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                 Console.Write("Digite a opção desejada: ");
                 controle = char.Parse(Console.ReadLine()!);
 
+
             }
+
             Console.WriteLine();
             FormatTitles("***Aguarde um instante que estamos finalizando seu pedido***");
 
@@ -609,7 +604,7 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
         {
             StatusOrder status = new StatusOrder();
             status = Enum.Parse<StatusOrder>("Delivered");
-
+            Console.WriteLine("=====================================================");
             if (orderHistory.orders.FirstOrDefault(x => x.Customer.UserId == customer.UserId) != null &&
                 orderHistory.orders.FirstOrDefault(x => x.Status == status) != null)
             {
@@ -620,6 +615,7 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
 
                     if (order.Status == status && order.Customer.UserId == customer.UserId)
                     {
+                        double valorTotalPedido = 0.00;
                         Console.Write("Id Pedido: " + order.OrderId + "\n");
                         Console.Write("Data do pedido: " + order.Moment + "\n");
                         Console.Write("Status: " + order.Status + "\n");
@@ -628,7 +624,10 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                         foreach (Product product in order.Products)
                         {
                             Console.Write("Produto: " + product.Name + ", R$ " + product.Price.ToString("F2", CultureInfo.InvariantCulture) + "\n"); ;
+                            valorTotalPedido += product.Price;
                         }
+                        Console.WriteLine();
+                        FormatTitles("***VALOR TOTAL PEDIDO: " + valorTotalPedido.ToString("F2", CultureInfo.InvariantCulture) + "***");
                         Console.WriteLine("=====================================================");
                     }
 
@@ -654,7 +653,7 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
         {
             StatusOrder status = new StatusOrder();
             status = Enum.Parse<StatusOrder>("Processing");
-
+            Console.WriteLine("=====================================================");
             if (orderHistory.orders.FirstOrDefault(x => x.Customer.UserId == customer.UserId) != null &&
                 orderHistory.orders.FirstOrDefault(x => x.Status == status) != null)
             {
@@ -663,8 +662,9 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                 {
 
 
-                    if ((order.Status == status && order.Customer.UserId == customer.UserId))
+                    if (order.Status == status && order.Customer.UserId == customer.UserId)
                     {
+                        double valorTotalPedido = 0.00;
                         Console.Write("Id Pedido: " + order.OrderId + "\n");
                         Console.Write("Data do pedido: " + order.Moment + "\n");
                         Console.Write("Status: " + order.Status + "\n");
@@ -673,7 +673,12 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                         foreach (Product product in order.Products)
                         {
                             Console.Write("Produto: " + product.Name + ", R$ " + product.Price.ToString("F2", CultureInfo.InvariantCulture) + "\n"); ;
+                            valorTotalPedido += product.Price;
                         }
+                        Console.WriteLine();
+
+                        FormatTitles("*** VALOR TOTAL PEDIDO: R$ " + valorTotalPedido.ToString("F2", CultureInfo.InvariantCulture) + "***");
+
                         Console.WriteLine("=====================================================");
 
                     }
@@ -689,6 +694,42 @@ FormatTitles("=======================Seja Bem-Vindo!=======================");
                 CustomerMenu(baseUsers, catalog, customer, orderHistory);
             }
         }
+
+        public static void Reports(BaseUsers baseUsers, Catalog catalog, Administrator administrator, OrderHistory orderHistory)
+        {
+            Console.WriteLine("1 - Total de Vendas por Clientes\n2 - Produtos Mais Comprados\n3 - Produtos Menos Comprados\nTotal de Vendas no Período");
+            Console.WriteLine();
+            int op = int.Parse(Console.ReadLine()!);
+            double totalComprado = 0.00;
+
+            if (op == 1)
+            {
+                MainTitle();
+                Console.WriteLine();
+                FormatTitles("***RELATÓRIO DE VENDAS POR CLIENTE***");
+                foreach (User user in baseUsers.Users)
+                {
+                    if (orderHistory.orders.FirstOrDefault(x => x.Customer.UserId == user.UserId) != null)
+                    {
+                        foreach (Order order in orderHistory.orders)
+                        {
+                            foreach (Product product in order.Products)
+                            {
+                                totalComprado += product.Price;
+                            }
+                        }
+                        Console.WriteLine("Nome do cliente: " + user.Name + ",  Total comprado: " + totalComprado.ToString("F2", CultureInfo.InvariantCulture));
+                    }
+                   
+                }
+                Console.WriteLine();
+                Console.WriteLine("Aperte qualquer tecla para voltar");
+                Console.ReadLine();
+            }
+
+
+        }
+
     }
 }
 

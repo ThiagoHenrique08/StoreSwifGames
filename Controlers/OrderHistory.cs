@@ -26,9 +26,11 @@ namespace SwiFGames.Controlers
 
         public override string ToString()
         {
+            double valorTotalPedido = 0.00;
             StringBuilder sb = new StringBuilder();
             foreach (Order order in orders)
             {
+                
 
                 sb.Append("Id: ");
                 sb.Append(order.OrderId);
@@ -57,12 +59,15 @@ namespace SwiFGames.Controlers
                     sb.AppendLine(product.Description);
                     sb.Append("Price: ");
                     sb.AppendLine(product.Price.ToString("F2", CultureInfo.InvariantCulture));
+                    valorTotalPedido += product.Price;
                 }
                 sb.AppendLine();
+                sb.Append("Valor total do pedido: ");
+                sb.AppendLine(valorTotalPedido.ToString(CultureInfo.InvariantCulture));
                 sb.Append("===========================================================================");
                 sb.AppendLine();
             }
-
+                
 
             return sb.ToString();
         }
