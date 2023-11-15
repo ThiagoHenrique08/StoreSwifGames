@@ -3,6 +3,10 @@ using System.Globalization;
 using SwiFGames.Entities.Enums;
 using SwiFGames.Controlers;
 using System;
+using System.Linq;
+using System.Xml.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace SwiFGames
 {
@@ -107,7 +111,7 @@ namespace SwiFGames
 
                             MainTitle();
                             Console.WriteLine();
-                            FormatTitles("***MENU ADMINISTRADOR***");
+                           
                             AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
 
                         }
@@ -278,7 +282,9 @@ namespace SwiFGames
         }
         public static void AdministratorMenu(BaseUsers baseUsers, Catalog catalog, Administrator administrator, OrderHistory orderHistory)
         {
+            FormatTitles("MENU ADMINISTRATOR");  
             Console.WriteLine("1 - Produtos\n2 - Relatórios\n3 - Usuários Cadastrados\n4 - Logout");
+            Console.WriteLine();
             Console.WriteLine();
             Console.Write("Digite a opção desejada: ");
             int optionCustomerMenu = int.Parse(Console.ReadLine()!);
@@ -289,12 +295,16 @@ namespace SwiFGames
 
                     MainTitle();
                     Console.WriteLine();
+                    FormatTitles("***MENU - OPÇÕES DE PRODUTO***");
+                 
                     Console.WriteLine("1 - Cadastrar um novo produto\n2 - Remover um produto\n3 - Alterar dados de um produto\n4 - Ver Catalogo");
                     Console.Write("Digite a opção desejada: ");
                     int op = int.Parse(Console.ReadLine()!);
                     if (op == 1)
                     {
                         MainTitle();
+                        Console.WriteLine();
+                        FormatTitles("***CADASTRANDO UM NOVO PRODUTO***");
                         Console.WriteLine();
                         Random aleatorio = new Random();
                         int auxId = aleatorio.Next(100);
@@ -321,6 +331,7 @@ namespace SwiFGames
                     }
                     else if (op == 2)
                     {
+                   
 
                         MainTitle();
                         Console.WriteLine(catalog);
@@ -432,6 +443,9 @@ namespace SwiFGames
                 case 2:
 
                     MainTitle();
+                    Console.WriteLine();
+                    FormatTitles("***MENU - OPÇÕES DE RELATÓRIO***");
+                    Console.WriteLine();
                     Reports(baseUsers, catalog, administrator, orderHistory);
                     break;
 
@@ -454,6 +468,7 @@ namespace SwiFGames
                 case 4:
 
                     MainTitle();
+                    MainMenu(baseUsers, catalog, orderHistory);
 
                     break;
             }
@@ -487,6 +502,13 @@ namespace SwiFGames
             controle = char.Parse(Console.ReadLine()!);
             if (controle == 'n')
             {
+                MainTitle();
+                CustomerMenu(baseUsers, catalog, customer, orderHistory);
+            }else if (controle != 'n' && controle != 's')
+            {
+                Console.WriteLine();
+                FormatTitles("Opção inválida!");
+                Thread.Sleep(3000);
                 MainTitle();
                 CustomerMenu(baseUsers, catalog, customer, orderHistory);
             }
@@ -556,6 +578,7 @@ namespace SwiFGames
             FormatTitles("***Deseja finalizar algum pedido? (s/n)***");
             Console.Write("Digite sua opção: ");
             char op = char.Parse(Console.ReadLine()!);
+
             Console.WriteLine();
 
             switch (op)
@@ -697,39 +720,126 @@ namespace SwiFGames
 
         public static void Reports(BaseUsers baseUsers, Catalog catalog, Administrator administrator, OrderHistory orderHistory)
         {
-            Console.WriteLine("1 - Total de Vendas por Clientes\n2 - Produtos Mais Comprados\n3 - Produtos Menos Comprados\nTotal de Vendas no Período");
+            Console.WriteLine("1 - Total de Vendas por Clientes\n2 - Total Vendas Por Produto\n3 - Total de Pedidos não finalizados por cliente");
             Console.WriteLine();
+            Console.Write("Digite a opção desejada: ");
             int op = int.Parse(Console.ReadLine()!);
-            double totalComprado = 0.00;
+            Console.WriteLine();
+
+            double totalVendido = 0.00;
 
             if (op == 1)
             {
                 MainTitle();
                 Console.WriteLine();
+                StatusOrder status = Enum.Parse<StatusOrder>("Delivered");
                 FormatTitles("***RELATÓRIO DE VENDAS POR CLIENTE***");
+                Console.WriteLine();
+                Console.WriteLine("=====================================================");
                 foreach (User user in baseUsers.Users)
                 {
-                    if (orderHistory.orders.FirstOrDefault(x => x.Customer.UserId == user.UserId) != null)
+
+                    foreach (Order order in orderHistory.orders)
                     {
-                        foreach (Order order in orderHistory.orders)
+                        if (order.Customer!.UserId == user.UserId && order.Status == status)
                         {
                             foreach (Product product in order.Products)
                             {
-                                totalComprado += product.Price;
+                                totalVendido += product.Price;
+                            }
+                            if (totalVendido != 0)
+                            {
+                                Console.WriteLine("Nome do cliente: " + user.Name + "\nTotal Vendido: R$ " + totalVendido.ToString("F2", CultureInfo.InvariantCulture));
+                                Console.WriteLine("=====================================================");
                             }
                         }
-                        Console.WriteLine("Nome do cliente: " + user.Name + ",  Total comprado: " + totalComprado.ToString("F2", CultureInfo.InvariantCulture));
+                        totalVendido = 0;
                     }
-                   
+
                 }
                 Console.WriteLine();
                 Console.WriteLine("Aperte qualquer tecla para voltar");
                 Console.ReadLine();
+                MainTitle();
+                AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
             }
+            else if (op == 2)
+            {
+                MainTitle();
+                Console.WriteLine();
+                FormatTitles("***RELATÓRIO DE VENDAS POR PRODUTO***");
+                StatusOrder status = Enum.Parse<StatusOrder>("Delivered");
+                int totalPerProduct = 0;
+                double valueTotalSaledPerProduct = 0.00;
+             
+                Console.WriteLine("=====================================================");
+                foreach (Product product in catalog.products)
+                {
+                    foreach (Order order in orderHistory.orders)
+                    {
+                        foreach (Product auxProduct in order.Products)
+                        {
+                            if (auxProduct.ProductId == product.ProductId && order.Status == status)
+                            {
+                                totalPerProduct += product.Quantity;
+                                valueTotalSaledPerProduct = product.Price * totalPerProduct;
+                            }
+                        }
+                    }
+                    if (totalPerProduct != 0)
+                    {
+                        Console.WriteLine("Nome do Produto: "
+                                            + product.Name
+                                            + "\nQuantidade Vendido: "
+                                            + totalPerProduct + "\nValor Total Vendido: R$ "
+                                            + valueTotalSaledPerProduct.ToString("F2", CultureInfo.InvariantCulture));
+                        Console.WriteLine("=====================================================");
+                        totalPerProduct = 0;
+                    }
+                }
 
+                Console.WriteLine();
+                Console.WriteLine("Digite qualquer tecla para voltar ao menu principal: ");
+                Console.ReadLine();
+                MainTitle();
+                AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
 
+            }
+            else if (op == 3)
+            {
+              
+                MainTitle();
+                Console.WriteLine();
+                FormatTitles("***RELATÓRIO DE PEDIDOS NÃO FINALIZADOS POR CLIENTE***");
+                StatusOrder status = Enum.Parse<StatusOrder>("Delivered");
+                int totalUnfinishedOrders = 0;
+                Console.WriteLine("=====================================================");
+                foreach (User user in baseUsers.Users)
+                {
+                    foreach (Order order in orderHistory.orders)
+                    {
+                        if (order.Customer!.UserId == user.UserId && order.Status != status)
+                        {
+                            totalUnfinishedOrders++;
+                        }
+                    }
+                    if (totalUnfinishedOrders != 0)
+                    {
+                        Console.WriteLine("Nome do cliente:  "
+                                        + user.Name
+                                        + "\nQuantidade de Pedidos não finalizados: "
+                                        + totalUnfinishedOrders);
+                        Console.WriteLine("=====================================================");
+                    }
+                    totalUnfinishedOrders = 0;
+                }
+                Console.WriteLine();
+                Console.WriteLine("Digite qualquer tecla para voltar ao menu principal: ");
+                Console.ReadLine();
+                MainTitle();
+                AdministratorMenu(baseUsers, catalog, administrator, orderHistory);
+            }
         }
-
     }
 }
 

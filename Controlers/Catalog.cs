@@ -37,7 +37,7 @@ namespace SwiFGames.Controlers
         {
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("*************************************************************************************");
+            sb.Append("=============================================================================================");
             foreach (Product product in products)
             {
                 sb.AppendLine();
@@ -50,7 +50,7 @@ namespace SwiFGames.Controlers
                 sb.Append("Price: ");
                 sb.AppendLine(product.Price.ToString("F2", CultureInfo.InvariantCulture));
 
-                sb.Append("*************************************************************************************");
+                sb.Append("=============================================================================================");
             }
             return sb.ToString();
         }
